@@ -135,6 +135,7 @@ class ArticleType(db.Model):
     articles = db.relationship('Article', backref='articleType', lazy='dynamic')
     menu_id = db.Column(db.Integer, db.ForeignKey('menus.id'), default=None)
     setting_id = db.Column(db.Integer, db.ForeignKey('articleTypeSettings.id'))
+    parent_id = db.Column(db.Integer,default=1)
 
     @staticmethod
     def insert_system_articleType():
@@ -176,6 +177,42 @@ class ArticleType(db.Model):
 
     def __repr__(self):
         return '<Type %r>' % self.name
+
+
+    @staticmethod
+    def return_types():
+        types = [(m.id, m.name) for m in ArticleType.query.all()]
+        return types
+
+    @staticmethod
+    def menu_tree():
+        '''2n算法'''
+        allTypes = ArticleType.query.all()
+        keyDict = {}
+        for item in allTypes:
+            #过滤掉未分类
+            if item.id == 1:
+                continue
+            key = item.parent_id
+            if key in keyDict:
+                keyDict[key].append(item)
+            else:
+                keyDict[key] = [item]
+        retDict = {}
+        def get_subs(key):
+            ret = []
+            if key not in keyDict:
+                return ret
+            for item in keyDict[key]:
+                if item.id in keyDict:
+                    ret.append({'item':item,'subs':get_subs(item.id)})
+                else:
+                    ret.append({'item':item,'subs':[]})
+            return ret
+
+        retDict['subs'] = get_subs(1)
+        return retDict
+
 
 
 class Source(db.Model):

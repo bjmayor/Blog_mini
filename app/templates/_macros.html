@@ -29,3 +29,20 @@
         </li>
     </ul>
 {% endmacro %}
+
+{% macro tree_menu_widget(subs) %}
+    {% for menu in subs %}
+        {% if menu.subs|length ==0 %}
+           <li>
+               <a href="{{ url_for('main.articleTypes', id=menu.item.id) }}"> {{ menu.item.name }} </a>
+           </li>
+        {% else %}
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="{{ url_for('main.articleTypes', id=menu.item.id) }}"> {{ menu.item.name }} </a>
+                <ul class="dropdown-menu">
+                    {{ tree_menu_widget(menu.subs) }}
+                </ul>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

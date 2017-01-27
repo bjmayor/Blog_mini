@@ -1,4 +1,5 @@
 {% extends "bootstrap/base.html" %}
+{% import '_macros.html' as macros %}
 {% block title %}
     {{ BlogInfo.query.first().title }}
 {% endblock %}
@@ -35,37 +36,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class=""><a href="/"><span class="glyphicon glyphicon-home"> 首页</span></a></li>
-                    {% for menu in Menu.query.order_by(Menu.order.asc()).all() %}
-                        {% if menu.types.count() %}
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ menu.name }} <b
-                                        class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    {% for article_type in menu.types.all() %}
-                                        {% if not article_type.is_hide %}
-                                            <li>
-                                                <a href="{{ url_for('main.articleTypes', id=article_type.id) }}">
-                                                    {{ article_type.name }}
-                                                </a>
-                                            </li>
-                                            <li class="divider"></li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    {% for article_type in ArticleType.query.all() %}
-                        {% if not article_type.menu %}
-                            {% if not article_type.is_hide %}
-                                <li>
-                                    <a href="{{ url_for('main.articleTypes', id=article_type.id) }}">
-                                        {{ article_type.name }}
-                                    </a>
-                                </li>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
+                    {{ macros.tree_menu_widget(article_types_tree.subs) }}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}

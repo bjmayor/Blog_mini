@@ -42,6 +42,7 @@ class AddArticleTypeForm(Form):
     introduction = TextAreaField(u'分类介绍')
     setting_hide = SelectField(u'属性', coerce=int, validators=[DataRequired()])
     menus = SelectField(u'所属导航', coerce=int, validators=[DataRequired()])
+    parent_types = SelectField(u'父分类',coerce=int,validators=[DataRequired()])
 # You must add coerce=int, or the SelectFile validate function only validate the int data
 
 

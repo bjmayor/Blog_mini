@@ -75,5 +75,9 @@ def deploy(deploy_type):
         Comment.generate_fake(300)
 
 
+@app.context_processor
+def inject_menus():
+    return dict(article_types_tree=ArticleType.menu_tree())
+
 if __name__ == '__main__':
     manager.run()

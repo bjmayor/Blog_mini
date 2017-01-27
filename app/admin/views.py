@@ -345,10 +345,13 @@ def manage_articleTypes():
     form2= EditArticleTypeForm()
 
     menus = Menu.return_menus()
+    parent_types = ArticleType.return_types()
     return_setting_hide = ArticleTypeSetting.return_setting_hide()
     form.menus.choices = menus
+    form.parent_types.choices = parent_types
     form.setting_hide.choices = return_setting_hide
     form2.menus.choices = menus
+    form2.parent_types.choices = parent_types
     form2.setting_hide.choices = return_setting_hide
 
     page = request.args.get('page', 1, type=int)
@@ -365,8 +368,10 @@ def manage_articleTypes():
             menu = Menu.query.get(form.menus.data)
             if not menu:
                menu = None
+
+            parent_type = ArticleType.query.get(form.parent_types.data)
             articleType = ArticleType(name=name, introduction=introduction, menu=menu,
-                                      setting=ArticleTypeSetting(name=name))
+                                      setting=ArticleTypeSetting(name=name),parent_id=parent_type.id)
             if setting_hide == 1:
                 articleType.setting.hide = True
             if setting_hide == 2:
@@ -398,8 +403,10 @@ def edit_articleType():
     form2= EditArticleTypeForm()
 
     menus = Menu.return_menus()
+    parent_types = ArticleType.return_types()
     setting_hide = ArticleTypeSetting.return_setting_hide()
     form2.menus.choices = menus
+    form2.parent_types.choices = parent_types
     form2.setting_hide.choices = setting_hide
 
     page = request.args.get('page', 1, type=int)
@@ -419,6 +426,7 @@ def edit_articleType():
                 if not menu:
                     menu = None
                 articleType.menu = menu
+                articleType.parent_id = ArticleType.query.get(form2.parent_types.data).id
                 if setting_hide == 1:
                     articleType.setting.hide = True
                 if setting_hide == 2:
@@ -438,6 +446,7 @@ def edit_articleType():
             articleType.name = name
             articleType.introduction = introduction
             articleType.menu = menu
+            articleType.parent_id = ArticleType.query.get(form2.parent_types.data).id
             if not articleType.setting:
                 articleType.setting = ArticleTypeSetting(name=articleType.name)
             if setting_hide == 1:
