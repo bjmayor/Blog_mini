@@ -27,7 +27,7 @@
 </div>
 {% endblock %}
 
-{% block script %}
+{% block scripts %}
     {{ super() }}
     <script src="{{ url_for('static', filename='tinymce/js/tinymce/tinymce.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/tinymce_setup.js') }}"></script>

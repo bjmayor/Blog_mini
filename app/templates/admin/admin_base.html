@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 
-{% block Content %}
+{% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-2 entry-box" style="background-color: ">
@@ -39,7 +39,7 @@
 </div>
 {% endblock %}
 
-{% block script %}
+{% block scripts %}
     {{ super() }}
     <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}
