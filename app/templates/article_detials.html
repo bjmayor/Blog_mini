@@ -5,7 +5,7 @@
     Blog_mini -{{ article.title }}
 {% endblock %}
 
-{% block content %}
+{% block main%}
 <div id='article-detials' class="entry-box">
     {% include '_article_info.html' %}
     <hr>
@@ -48,10 +48,11 @@
     <link href="{{ url_for('static', filename='css/prism.css') }}" rel="stylesheet">
 {% endblock %}
 
-{% block script %}
+{% block scripts %}
     {{ super() }}
     <script src="{{ url_for('static', filename='tinymce/js/tinymce/extentsion_self/codesimple_extentsion/prism.js') }}">
     </script>
     <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
     <script src="{{ url_for('static', filename='js/commentReply.js') }}"></script>
+    {{ pagedown.include_pagedown() }}
 {% endblock %}

@@ -1,20 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
+{% extends "bootstrap/base.html" %}
+{% block title %}
+    {{ BlogInfo.query.first().title }}
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <title>
-        {% block title %}
-        {{ BlogInfo.query.first().title }}
-        {% endblock %}
-    </title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     {% block stylesheet %}
-        <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='css/common.css') }}" rel="stylesheet">
-    {% endblock %}
-</head>
-<body>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}">{% endblock %}
+{% endblock %}
+
+{% block navbar %}
 <header>
     <div class='header-top'>
         <div class="container">
@@ -88,7 +86,9 @@
         </div>
     </nav>
 </header>
-{% block Content %}
+{% endblock %}
+
+{% block content %}
     <div class="content">
         <div class="container">
             <div class="row">
@@ -99,7 +99,7 @@
                             {{ message }}
                         </div>
                     {% endfor %}
-                    {% block content %}
+                    {% block main%}
                     {% endblock %}
                 </div>
                 <div class="col-md-4 blog_nav">
@@ -134,7 +134,8 @@
             </div>
         </div>
     </div>
-{% endblock %}
+
+{% block footer %}
 <div class="footer">
     <p class="footer-content">
         @2016
@@ -158,9 +159,11 @@
         <span class="glyphicon glyphicon-arrow-down"></span>
     </button>
 </div>
-{% block script %}
-    <script src="{{ url_for('static', filename='js/jquery-2.2.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% endblock %}
+
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
     <script src="{{ url_for('static', filename='js/floatButton.js') }}"></script>
     {# csrfToken for Ajax   #}
     <script>
@@ -176,5 +179,3 @@
     {{ moment.include_moment() }}
     {{ moment.lang('zh-cn') }}
 {% endblock %}
-</body>
-</html>

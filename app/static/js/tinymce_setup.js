@@ -5,8 +5,8 @@ tinymce.init({
     language:'zh_CN',
     height:400,
     plugins: [
-            'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
-            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+            'advlist autolink link image lists charmap print preview code hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars fullscreen insertdatetime media nonbreaking',
             'save table contextmenu directionality emoticons template paste textcolor',
             'codesample',
     ],
@@ -16,7 +16,7 @@ tinymce.init({
      alignleft aligncenter alignright alignjustify | \
      bullist numlist outdent indent | \
      link image | \
-     print preview media fullpage | \
+     print preview code media fullpage | \
      forecolor backcolor emoticons |\
      codesample fontsizeselect fullscreen',
     fontsize_formats: '10pt 12pt 14pt 18pt 24pt 36pt',
@@ -29,8 +29,8 @@ tinymce.init({
     directionality:'ltr',
     language:'zh_CN',
     plugins: [
-            'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
-            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+            'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars fullscreen insertdatetime media nonbreaking',
             'save table contextmenu directionality emoticons template paste textcolor',
             'codesample',
     ],

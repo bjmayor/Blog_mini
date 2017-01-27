@@ -2,6 +2,7 @@
 from flask import render_template, request, current_app, redirect,\
     url_for, flash
 from . import main
+from flask_login import current_user
 from ..models import Article, ArticleType, article_types, Comment, \
     Follow, User, Source, BlogView
 from .forms import CommentForm
@@ -75,6 +76,9 @@ def articleDetails(id):
     if form.errors:
         flash(u'发表评论失败', 'danger')
 
+    if not current_user.is_anonymous:
+        form.name.data = current_user._get_current_object().username
+        form.email.data = current_user._get_current_object().email
     page = request.args.get('page', 1, type=int)
     if page == -1:
         page = (article.comments.count() - 1) // \

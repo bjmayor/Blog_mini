@@ -34,7 +34,7 @@ body {
     vertical-align: baseline;
 }
 .article-entry-title {
-    text-align: center;
+    text-align: left;
     margin-bottom: 10px;
 }
 .article-entry-title a {

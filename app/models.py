@@ -3,6 +3,8 @@ import hashlib
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin
+from markdown import markdown
+import bleach
 from . import db, login_manager
 
 article_types = {u'开发语言': ['Python', 'Java', 'JavaScript'],
@@ -210,6 +212,7 @@ class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
+    content_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     author_name = db.Column(db.String(64))
     author_email = db.Column(db.String(64))
@@ -296,6 +299,18 @@ class Comment(db.Model):
     def followed_name(self):
         if self.is_reply():
             return self.followed.first().followed.author_name
+
+
+    @staticmethod
+    def on_change_cotent(target, value, oldvalue,initiator):
+        allowed_tags = ['a','abbr', 'acronym','b','blockquote','code',
+                        'em','i','li','ol','pre','strong','ul',
+                        'h1','h2','h3','p']
+        target.content_html = bleach.linkify(bleach.clean(markdown(value,output_format='html'),
+                                                         tags=allowed_tags,
+                                                         strip=True))
+
+db.event.listen(Comment.content,'set',Comment.on_change_cotent)
 
 class Article(db.Model):
     __tablename__ = 'articles'
