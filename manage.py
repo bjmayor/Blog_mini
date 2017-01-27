@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+import os
 from app import create_app, db
 from app.models import ArticleType, article_types, Source, \
     Comment, Article, User, Menu, ArticleTypeSetting, BlogInfo, \
     Plugin, BlogView
 
-app = create_app()
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
