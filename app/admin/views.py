@@ -15,6 +15,7 @@ from .forms import SubmitArticlesForm, ManageArticlesForm, DeleteArticleForm, \
     EditArticleTypeForm, AddArticleTypeNavForm, EditArticleNavTypeForm, SortArticleNavTypeForm, \
     CustomBlogInfoForm, AddBlogPluginForm, ChangePasswordForm, EditUserInfoForm
 from .. import db
+import logging
 
 
 @admin.route('/')
@@ -67,7 +68,6 @@ def editArticles(id):
     form.source.choices = sources
     types = [(t.id, t.name) for t in ArticleType.query.all()]
     form.types.choices = types
-
     if form.validate_on_submit():
         articleType = ArticleType.query.get_or_404(int(form.types.data))
         article.articleType = articleType

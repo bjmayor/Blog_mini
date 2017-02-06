@@ -35,6 +35,7 @@ class DevelopmentConfig(Config):
         'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 
 
+
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('BLOG_TEST_DATABASE_URL') or \
@@ -53,13 +54,21 @@ class ProductionConfig(Config):
         Config.init_app(app)
         # email errors to the administrators
         import logging
-        from logging.handlers import SMTPHandler
+        from logging.handlers import SMTPHandler,RotatingFileHandler
+
+        Rthandler = RotatingFileHandler(os.path.join(basedir,'../log/myapp.log'), maxBytes=100*1024*1024,backupCount=5)
+        Rthandler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+        Rthandler.setFormatter(formatter)
+        app.logger.addHandler(Rthandler)
+
         credentials = None
         secure = None
         if getattr(cls, 'MAIL_USERNAME', None) is not None:
             credentials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
             if getattr(cls, 'MAIL_USE_TLS', None):
                 secure = ()
+
         mail_handler = SMTPHandler(
             mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
             fromaddr=cls.FLASKY_MAIL_SENDER,
@@ -69,6 +78,8 @@ class ProductionConfig(Config):
             secure=secure)
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
+
+
 
 
 class HerokuConfig(ProductionConfig):
