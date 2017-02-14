@@ -33,6 +33,10 @@ def make_shell_context():
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
 
+@manager.command
+def upgrade():
+    from app.models import ArticleType
+    ArticleType.fix_root_type()
 
 @manager.command
 def deploy(deploy_type):
@@ -42,6 +46,7 @@ def deploy(deploy_type):
 
     # upgrade database to the latest version
     upgrade()
+
 
     if deploy_type == 'product':
         # step_1:insert basic blog info

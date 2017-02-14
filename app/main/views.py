@@ -35,7 +35,9 @@ def index():
 def articleTypes(id):
     BlogView.add_view(db)
     page = request.args.get('page', 1, type=int)
-    pagination = ArticleType.query.get_or_404(id).articles.order_by(
+    sub_list = ArticleType.get_subs(id)
+    pagination = Article.query.join(ArticleType,ArticleType.id == Article.articleType_id)\
+        .filter(ArticleType.id.in_(tuple(sub_list))).order_by(
             Article.create_time.desc()).paginate(
             page, per_page=current_app.config['ARTICLES_PER_PAGE'],
             error_out=False)

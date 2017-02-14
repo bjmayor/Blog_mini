@@ -371,7 +371,7 @@ def manage_articleTypes():
 
             parent_type = ArticleType.query.get(form.parent_types.data)
             articleType = ArticleType(name=name, introduction=introduction, menu=menu,
-                                      setting=ArticleTypeSetting(name=name),parent_id=parent_type.id)
+                                      setting=ArticleTypeSetting(name=name),parent_id=parent_type.id,root_type=parent_type.root_type)
             if setting_hide == 1:
                 articleType.setting.hide = True
             if setting_hide == 2:
@@ -426,7 +426,10 @@ def edit_articleType():
                 if not menu:
                     menu = None
                 articleType.menu = menu
-                articleType.parent_id = ArticleType.query.get(form2.parent_types.data).id
+                parent_type_item = ArticleType.query.get(form2.parent_types.data)
+                articleType.parent_id = parent_type_item.id
+                articleType.root_type = parent_type_item.root_type
+
                 if setting_hide == 1:
                     articleType.setting.hide = True
                 if setting_hide == 2:

@@ -136,6 +136,7 @@ class ArticleType(db.Model):
     menu_id = db.Column(db.Integer, db.ForeignKey('menus.id'), default=None)
     setting_id = db.Column(db.Integer, db.ForeignKey('articleTypeSettings.id'))
     parent_id = db.Column(db.Integer,default=1)
+    root_type = db.Column(db.Integer,default=1)
 
     @staticmethod
     def insert_system_articleType():
@@ -212,6 +213,44 @@ class ArticleType(db.Model):
 
         retDict['subs'] = get_subs(1)
         return retDict
+
+    def get_subs(id):
+        root = None
+        def find_root(id,subs):
+            nonlocal root
+            for o in subs:
+                item  = o['item']
+                if item.id == id:
+                    root = o['subs']
+                else:
+                    find_root(id,o['subs'])
+
+        find_root(id, ArticleType.menu_tree()['subs'])
+
+        ret = [id]
+        def get_id(subs):
+            for o in subs:
+                ret.append(o['item'].id)
+                get_id(o['subs'])
+        get_id(root)
+        return ret
+
+
+    @staticmethod
+    def fix_root_type(root_type=None, subs=None):
+        '''修复root_type,后增的字段
+        '''
+        if subs == None:
+            tree = ArticleType.menu_tree()
+            subs = tree['subs']
+        for o in subs:
+            item = o['item']
+            item.root_type =  root_type if root_type else item.id
+            db.session.add(item)
+            db.session.commit()
+            if o['subs']:
+                ArticleType.fix_root_type(item.root_type, o['subs'])
+
 
 
 
