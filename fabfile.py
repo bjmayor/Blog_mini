@@ -18,7 +18,7 @@ from fabric.api import *
 #服务器配置
 env.user = 'work'
 env.sudo_user = 'root'
-env.hosts=['123.57.145.149']
+env.hosts=['123.57.145.149','123.56.99.154']
 
 #数据库配置
 db_user = 'root'

@@ -28,7 +28,7 @@ body {
 }
 
 .entry-box img {
-    width: 100%;
+    max-width: 100%;
 }
 .article-entry-header {
     margin: 0;

@@ -32,17 +32,20 @@ app.jinja_env.globals['BlogView'] = BlogView
 
 
 def make_shell_context():
-    return dict(db=db, ArticleType=ArticleType,Source=Source,
+    return dict(db=db, ArticleType=ArticleType, Source=Source,
                 Comment=Comment, Article=Article, User=User, Menu=Menu,
                 ArticleTypeSetting=ArticleTypeSetting, BlogInfo=BlogInfo,
                 Plugin=Plugin, BlogView=BlogView)
 
+
 manager.add_command("shell", Shell(make_context=make_shell_context))
+
 
 @manager.command
 def upgrade():
     from app.models import ArticleType
     ArticleType.fix_root_type()
+
 
 @manager.command
 def deploy(deploy_type):
@@ -53,12 +56,12 @@ def deploy(deploy_type):
     # upgrade database to the latest version
     upgrade()
 
-
     if deploy_type == 'product':
         # step_1:insert basic blog info
         BlogInfo.insert_blog_info()
         # step_2:insert admin account
-        User.insert_admin(email='blog_mini@163.com', username='blog_mini', password='blog_mini')
+        User.insert_admin(email='blog_mini@163.com',
+                          username='blog_mini', password='blog_mini')
         # step_3:insert system default setting
         ArticleTypeSetting.insert_system_setting()
         # step_4:insert default article sources
@@ -70,7 +73,8 @@ def deploy(deploy_type):
         # step_7:insert blog view
         BlogView.insert_view()
 
-    # You must run `python manage.py deploy(product)` before run `python manage.py deploy(test_data)`
+    # You must run `python manage.py deploy(product)` before run
+    # `python manage.py deploy(test_data)`
     if deploy_type == 'test_data':
         # step_1:insert navs
         Menu.insert_menus()
@@ -84,6 +88,7 @@ def deploy(deploy_type):
         Comment.generate_fake_replies(100)
         # step_4:generate random comments
         Comment.generate_fake(300)
+
 
 @manager.command
 def test(coverage=False):
@@ -106,6 +111,7 @@ def test(coverage=False):
         print('HTML version: file://%s/index.html' % covdir)
         COV.erase()
 
+
 @manager.command
 def profile(length=25, profile_dir=None):
     """Start the application under the code profiler."""
@@ -114,9 +120,11 @@ def profile(length=25, profile_dir=None):
                                       profile_dir=profile_dir)
     app.run()
 
+
 @app.context_processor
 def inject_menus():
     return dict(article_types_tree=ArticleType.menu_tree())
+
 
 if __name__ == '__main__':
     manager.run()
