@@ -26,6 +26,10 @@ body {
     box-shadow: 2px 2px 8px rgba(0,0,0,.2);
     border-color: #d6d6d6;
 }
+
+.entry-box img {
+    width: 100%;
+}
 .article-entry-header {
     margin: 0;
     padding: 0;
