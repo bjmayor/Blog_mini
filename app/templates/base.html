@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     {% block stylesheet %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}">{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css',version=0.1) }}">{% endblock %}
 {% endblock %}
 
 {% block navbar %}
@@ -146,6 +146,8 @@
                 }
             }
         })
+
+
     </script>
     {{ moment.include_moment() }}
     {{ moment.lang('zh-cn') }}
